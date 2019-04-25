@@ -2,4 +2,6 @@
 \.idea/
 */out/
 out/
+*/build/
+build/
 *.iml
