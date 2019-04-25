@@ -1,0 +1,33 @@
+apply from: "config.gradle"
+
+allprojects {
+    group 'com.rqhua'
+    version '1.0-SNAPSHOT'
+    repositories {
+        mavenCentral()
+        switch (maventype) {
+            case mavenparams.maventype_local:
+                maven { url mavenparams.mavenlocal }
+                break
+            case mavenparams.maventype_git:
+                maven { url mavenparams.mavengit }
+                break
+            case mavenparams.maventype_server:
+                maven { url mavenparams.maventype_server }
+                break
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    // 指定jvm版本
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    dependencies {
+        testCompile rootProject.ext.dependencies["junit"]
+        compile rootProject.ext.dependencies["kotlin-stdlib-jdk8"]
+    }
+}
+

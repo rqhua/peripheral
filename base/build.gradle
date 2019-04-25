@@ -1,0 +1,48 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.30'
+    id 'maven'
+}
+
+apply from: "../config.gradle"
+
+dependencies {
+    compile rootProject.ext.dependencies["log4j-api"]
+    compile rootProject.ext.dependencies["log4j-core"]
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            def filePath = mavenparams.mavenlocal
+            switch (maventype) {
+                case mavenparams.maventype_local:
+                    filePath = mavenparams.mavenlocal
+                    def mavenRepositoryPath = file(filePath)
+                    repository(url: "file://${mavenRepositoryPath.absolutePath}")
+                    break
+                case mavenparams.maventype_server:
+                    filePath = mavenparams.maventype_server
+                    repository(url: filePath) {
+                        authentication(userName: "admin", password: "admin123")
+                    }
+                    break
+                case mavenparams.maventype_git:
+                    filePath = mavenparams.mavengit
+                    repository(url:filePath) {
+                        authentication(userName: "xiaocaifly",password: "hua@92512312@")
+                    }
+                    break
+            }
+
+            pom.project {
+                name 'keyboard'
+                packaging 'jar'
+                description 'keyboard'
+
+                groupId 'com.rqhua.keyboard'
+                artifactId 'base'
+                version '0.1'
+            }
+        }
+    }
+}
